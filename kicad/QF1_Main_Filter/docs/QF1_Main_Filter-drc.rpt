@@ -1,0 +1,82 @@
+** Drc report for /home/claude/kicad/out/QF1_Main_Filter/QF1_Main_Filter.kicad_pcb **
+** Created on 2026-11-19 17:08:24 **
+
+** Found 18 DRC violations **
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(177.3700 mm, 155.0800 mm): Reference 'R10'
+    @(177.1300 mm, 151.8100 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(173.6300 mm, 151.8100 mm): Line on F.Silkscreen
+    @(173.8700 mm, 155.0800 mm): Reference 'R9'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(126.3700 mm, 109.0800 mm): Reference 'R21'
+    @(126.6300 mm, 105.8100 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(130.3700 mm, 109.0800 mm): Reference 'R20'
+    @(133.0000 mm, 109.0000 mm): Circle on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(124.8700 mm, 155.0800 mm): Reference 'R16'
+    @(124.6300 mm, 151.8100 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(128.1300 mm, 151.8100 mm): Line on F.Silkscreen
+    @(128.3700 mm, 155.0800 mm): Reference 'R15'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(121.1300 mm, 151.8100 mm): Line on F.Silkscreen
+    @(121.5000 mm, 154.5000 mm): Reference 'C9'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(117.8700 mm, 155.0800 mm): Reference 'R17'
+    @(117.6300 mm, 151.8800 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(114.3700 mm, 155.0800 mm): Reference 'R2'
+    @(114.1300 mm, 151.8100 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(170.3700 mm, 155.0800 mm): Reference 'R24'
+    @(170.1300 mm, 151.8100 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(153.3700 mm, 155.0800 mm): Reference 'R14'
+    @(153.1300 mm, 151.8800 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(149.8700 mm, 155.0800 mm): Reference 'R7'
+    @(149.6300 mm, 151.8100 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(160.3700 mm, 155.0800 mm): Reference 'R13'
+    @(160.1300 mm, 151.8100 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(156.6300 mm, 151.8100 mm): Line on F.Silkscreen
+    @(157.0000 mm, 154.5000 mm): Reference 'C10'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(146.1300 mm, 151.8100 mm): Line on F.Silkscreen
+    @(146.3700 mm, 155.0800 mm): Reference 'R6'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(135.3700 mm, 155.0800 mm): Reference 'R4'
+    @(135.1300 mm, 151.8100 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(131.6300 mm, 151.8100 mm): Line on F.Silkscreen
+    @(131.8700 mm, 155.0800 mm): Reference 'R3'
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(110.6300 mm, 151.8100 mm): Line on F.Silkscreen
+    @(110.8700 mm, 155.0800 mm): Reference 'R1'
+
+** Found 0 unconnected pads **
+
+** Found 0 Footprint errors **
+
+** End of Report **

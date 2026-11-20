@@ -1,0 +1,45 @@
+** Drc report for /home/claude/kicad/out/QF1_Amp_Supply/QF1_Amp_Supply.kicad_pcb **
+** Created on 2026-11-19 17:08:53 **
+
+** Found 9 DRC violations **
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(180.8400 mm, 137.4000 mm): Line on F.Silkscreen
+    @(178.5000 mm, 138.2000 mm): PCB Text '12-15' on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(178.5000 mm, 138.2000 mm): PCB Text '12-15' on F.Silkscreen
+    @(177.5000 mm, 137.6600 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(171.0800 mm, 147.5300 mm): Reference 'D103'
+    @(168.3600 mm, 147.4700 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(178.5000 mm, 138.2000 mm): PCB Text '12-15' on F.Silkscreen
+    @(180.6000 mm, 137.1600 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(165.3700 mm, 118.0800 mm): Reference 'R104'
+    @(165.7498 mm, 118.6610 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(157.0800 mm, 105.6300 mm): Reference 'R103'
+    @(151.8800 mm, 105.1700 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(171.0800 mm, 155.5300 mm): Reference 'D105'
+    @(168.3600 mm, 155.4700 mm): Line on F.Silkscreen
+[silk_overlap]: Silkscreen overlap
+    Rule: board setup constraints silk; Severity: warning
+    @(168.3600 mm, 151.4700 mm): Line on F.Silkscreen
+    @(171.0800 mm, 151.5300 mm): Reference 'D104'
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; Severity: warning
+    @(178.5000 mm, 138.2000 mm): PCB Text '12-15' on F.Silkscreen
+
+** Found 0 unconnected pads **
+
+** Found 0 Footprint errors **
+
+** End of Report **

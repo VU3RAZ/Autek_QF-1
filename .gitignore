@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.dsn
+*.ses
+*.net
+*.kicad_prl
+*-backups/
+fp-info-cache
+*.lck
+_autosave-*
+tools/freerouting-*.jar
