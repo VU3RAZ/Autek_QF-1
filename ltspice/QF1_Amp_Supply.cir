@@ -1,0 +1,56 @@
+* Autek QF-1 -- AUDIO POWER AMP / AC SUPPLY BOARD
+* Sallen-Key low-pass (R101,R102,C101,C102) around U101 + BC337/BC327 follower, bridge supply.
+* In LTspice: File > Open (Netlists), Run. Probe V(audio_out), V(bplus), I(RL).
+* The input is DC-coupled at B+/2 (the main board's U4 output idles there), so IN carries 7.5 V DC.
+*   VACRMS : AC input (transformer secondary or wall adapter), V rms
+*   RLOAD  : speaker / phones impedance
+*   VAMP   : test-signal peak amplitude at IN (V)
+
+.include qf1_models.lib
+
+.param VACRMS=12 RLOAD=8 VAMP=1 FSIG=1k MAINS=50
+.param OPGBW=3Meg OPSR=13Meg
+
+* ---- AC input and bridge rectifier (D102-D105), reservoir C106
+VAC AC1X AC2 SIN(0 {VACRMS*1.4142} {MAINS})
+RSEC AC1X AC1 0.5
+RLEAK AC2 0 100Meg
+D102 AC1 BPLUS QF_1N4004
+D103 AC2 BPLUS QF_1N4004
+D104 0 AC1 QF_1N4004
+D105 0 AC2 QF_1N4004
+C106 BPLUS 0 1000u
+C109 BPLUS 0 100n
+
+* ---- test signal at board IN (riding on the 7.5 V bias from the main board)
+VIN IN 0 DC 7.5 AC 1 SIN(7.5 {VAMP} {FSIG})
+
+* ---- Sallen-Key low-pass + unity-gain follower (feedback from the emitters)
+R101 IN NA 12k
+R102 NA NP 100k
+C101 NA EMIT 10n
+C102 NP 0 1n
+XU101 NP EMIT BPLUS 0 OA_OUT QF_OPAMP GBW={OPGBW} SR={OPSR}
+R103 OA_OUT DRV 100
+* bias string between the bases
+R104 DRV BIAS1 39
+D101 BIAS1 BIAS2 QF_1N4001
+R105 BIAS2 0 1k
+* complementary emitter followers
+Q101 QC1 DRV EMIT QF_BC337
+Q102 QC2 BIAS2 EMIT QF_BC327
+R106 QC1 BPLUS 3.3
+R107 QC2 0 3.3
+* output coupling, anti-thump, RF bypass, load
+C104 EMIT AUDIO_OUT 100u
+R108 AUDIO_OUT 0 390
+C105 AUDIO_OUT 0 100n
+RL AUDIO_OUT 0 {RLOAD}
+
+* ---- analysis (LTspice). The supply takes ~0.3 s to settle; look at the last 50 ms.
+.tran 10u 0.6 0.5 10u
+*.step param VAMP list 0.5 1 2 3 4
+.meas TRAN vpk MAX V(audio_out)
+.meas TRAN pout PARAM vpk*vpk/(2*RLOAD)
+.meas TRAN bplus AVG V(bplus)
+.end

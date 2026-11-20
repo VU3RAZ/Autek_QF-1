@@ -10,6 +10,7 @@ A modern rework of the 1970s **Autek Research QF-1** tunable audio filter (peak 
 | Preview of both boards (schematics, copper, assembly) | [`docs/QF1_KiCad_Overview.pdf`](docs/QF1_KiCad_Overview.pdf) |
 | Gerbers and drill files, ready for a PCB fab | `kicad/*/fab/*-gerbers.zip` |
 | BOMs | `kicad/*/docs/*-BOM.csv` |
+| LTspice / SPICE simulation: both boards and the complete unit, plus an `.asc` schematic generator | [`ltspice/`](ltspice/) |
 | Python generators (PDF redraw, schematics, PCB placement and routing) | [`tools/`](tools/) |
 
 Original manual scan: <https://vtda.org/docs/radio/Autek/Autek_QF-1.pdf>

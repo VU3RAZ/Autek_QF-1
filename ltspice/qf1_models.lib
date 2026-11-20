@@ -1,0 +1,38 @@
+* qf1_models.lib -- models for the Autek QF-1 SPICE netlists
+* Works in LTspice and ngspice.
+*
+* QF_OPAMP: single-pole op-amp macromodel with set gain-bandwidth, open-loop gain,
+* slew rate and output swing limits. Pin order matches LTspice's opamp2 symbol:
+*   In+  In-  V+  V-  Out
+* Use GBW=3Meg SR=13Meg for TL072/TL071 (the rebuild); GBW=1Meg SR=0.5Meg for the
+* original uA747/uA741. It models the GBW-driven Q enhancement in state-variable
+* filters to first order. Vendor models add excess phase on top of this.
+* HD = output headroom from each supply rail (V).
+
+.subckt QF_OPAMP inp inn vcc vee out params: GBW=3Meg SR=13Meg AOL=200k HD=1.5
+Rin inp inn 1T
+* transconductance stage, current-limited (slew rate = Ilim / 1nF)
+B1 0 n1 I=max(-{SR*1n}, min({SR*1n}, {6.2832*GBW*1n}*V(inp,inn)))
+C1 n1 0 1n
+R1 n1 0 {AOL/(6.2832*GBW*1n)}
+* clamp the internal node to the output swing (prevents wind-up)
+Ehi nh 0 vcc 0 1
+Vhi nh nhc {HD}
+Elo nl 0 vee 0 1
+Vlo nlc nl {HD}
+Dhi n1 nhc QF_DCLAMP
+Dlo nlc n1 QF_DCLAMP
+* output stage
+Eout no 0 n1 0 1
+Rout no out 50
+* quiescent supply current (~1.5 mA at 15 V)
+Rq vcc vee 10k
+.model QF_DCLAMP D(IS=1e-14 N=0.2)
+.ends QF_OPAMP
+
+* Discrete semiconductors (generic models; swap for vendor models if you have them)
+.model QF_1N4001 D(IS=14.1n N=1.984 RS=33.9m CJO=25.9p M=0.44 VJ=0.33 TT=5.7u BV=50 IBV=5u)
+.model QF_1N4004 D(IS=14.1n N=1.984 RS=33.9m CJO=25.9p M=0.44 VJ=0.33 TT=5.7u BV=400 IBV=5u)
+* BC337 / BC327 (substitutes for MPS6560 / MPS6562): approximate 800 mA, hFE ~250 parts
+.model QF_BC337 NPN(IS=10f BF=250 VAF=100 IKF=0.8 ISE=30f NE=1.5 BR=20 RB=10 RE=0.1 RC=0.3 CJE=40p CJC=15p TF=0.6n TR=40n XTB=1.5)
+.model QF_BC327 PNP(IS=10f BF=250 VAF=60 IKF=0.8 ISE=30f NE=1.5 BR=20 RB=10 RE=0.1 RC=0.3 CJE=50p CJC=25p TF=0.8n TR=40n XTB=1.5)

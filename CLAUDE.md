@@ -31,6 +31,16 @@ Requirements: KiCad 7 (`pcbnew` Python module and `kicad-cli`), Java plus `xvfb-
 (download https://github.com/freerouting/freerouting/releases/download/v1.9.0/freerouting-1.9.0.jar to `tools/`, or set `FREEROUTING_JAR`). Set `KICAD7_FOOTPRINT_DIR` if the
 library tables aren't configured. All paths are repo-relative (`tools/kicad-gen/paths.py`).
 
+## LTspice (`ltspice/`)
+- `QF1_Main_Filter.cir`, `QF1_Amp_Supply.cir` run in LTspice and ngspice; `QF1_Complete.cir` is GENERATED:
+  edit the two board files, then `python make_complete.py`.
+- Front-panel controls are params: FREQ, SEL (0..1 rotation), MODE (1 PK, 2 NTCH, 3 LP), LOGPOT; op-amp speed
+  OPGBW/OPSR (3Meg/13Meg TL072, 1Meg/0.5Meg original uA747).
+- `.asc` schematics: run `python ltspice/make_asc.py` ON THE USER'S PC. It reads pin positions from their
+  LTspice `lib/sym` (.asy) files and verifies each .asc via `LTspice -netlist` against the .cir. If it reports a
+  MISMATCH, fix the generator (pin SpiceOrder mapping or symbol choice); don't hand-edit the .asc files.
+- Use `.tran` with a non-zero step (ngspice rejects 0).
+
 ## Gotchas
 - **Re-running `main_k.py` / `amp_k.py` mints new symbol UUIDs.** The committed PCBs link to the committed
   schematics' UUIDs. After regenerating schematics, either rebuild the PCBs with the pipeline, or open the

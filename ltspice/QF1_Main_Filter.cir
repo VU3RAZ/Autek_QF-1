@@ -1,0 +1,112 @@
+* Autek QF-1 -- MAIN FILTER BOARD (two cascaded state-variable sections + U4)
+* Netlist traced from the original schematic. In LTspice: File > Open (files of type: Netlists),
+* then Run. Probe V(out_qf1) (board pin 21) or any named node below.
+*
+* Front-panel controls are parameters:
+*   FREQ  : FREQUENCY pot rotation 0..1 (0 = fully CCW = highest frequency)
+*   SEL   : SELECTIVITY pot rotation 0..1 (1 = fully CW = narrowest)
+*   MODE  : 1 = PK (peak), 2 = NTCH (notch), 3 = LP (low-pass)
+*   LOGPOT: 0 = linear-taper pots, 1 = audio (log) taper
+*   OPGBW / OPSR : op-amp gain-bandwidth and slew rate (TL072: 3Meg/13Meg; original uA747: 1Meg/0.5Meg)
+*   RT, RQ: the "chosen on test" resistors (R3,R5,R10,R11 and R4,R9), 4.7k as fitted in the KiCad rebuild
+* Node names follow the KiCad schematic (BPLUS = B+, BPIN = board pin 1).
+
+.include qf1_models.lib
+
+.param FREQ=0.5 SEL=0.7 MODE=1 LOGPOT=0
+.param OPGBW=3Meg OPSR=13Meg
+.param RT=4.7k RQ=4.7k RT8=4.7k
+.param VSUP=15 VAMP=0.5 FSIG=1k
+
+* pot resistances (rheostats, 0..500k), linear or audio taper; 1 ohm minimum
+.param RFRQ={1+500k*((1-LOGPOT)*FREQ + LOGPOT*(pow(10,2*FREQ)-1)/99)}
+.param RSEL={1+500k*((1-LOGPOT)*SEL + LOGPOT*(pow(10,2*SEL)-1)/99)}
+* function switch: one contact per mode is closed (10 mohm), the others open (1 Gohm)
+.param SPK={1-min(1,abs(MODE-1))} SNT={1-min(1,abs(MODE-2))} SLP={1-min(1,abs(MODE-3))}
+.param RON=0.01 ROFF=1G
+.param RPK={ROFF-SPK*(ROFF-RON)} RNT={ROFF-SNT*(ROFF-RON)} RLP={ROFF-SLP*(ROFF-RON)}
+
+* ---- supply (from amp board B+) and bias
+VB BPIN 0 {VSUP}
+D1 BPIN BPLUS QF_1N4001
+R21 BPLUS BIAS 220k
+R20 BIAS 0 220k
+C12 BIAS 0 22u
+C13 BPLUS 0 47u
+C14 BPLUS 0 100n
+C15 BPLUS 0 100n
+
+* ---- signal source: receiver audio (8 ohm source), AC 1 V for .ac, sine for .tran
+VIN SRC 0 DC 0 AC 1 SIN(0 {VAMP} {FSIG})
+RSRC SRC IN 8
+
+* ---- section 1: U1A summer, U1B and U2A integrators
+C1 IN C1_R1 10n
+R1 C1_R1 SUM1 100k
+XU1A SEL_F SUM1 BPLUS 0 HP1 QF_OPAMP GBW={OPGBW} SR={OPSR}
+R2 SUM1 HP1 22k
+R17 SUM1 LP1 22k
+* C9 (across R17): value not given on original, not fitted
+R16 HP1 NOTCH1 3.3k
+R15 NOTCH1 LP1 3.3k
+R3 HP1 INT1 {RT}
+XU1B BIAS INT1 BPLUS 0 BP1 QF_OPAMP GBW={OPGBW} SR={OPSR}
+C2 INT1 BP1 18n
+R4 SEL_F BIAS {RQ}
+R5 P9 INT2 {RT}
+XU2A BIAS INT2 BPLUS 0 LP1 QF_OPAMP GBW={OPGBW} SR={OPSR}
+C3 INT2 LP1 18n
+* front panel, section 1 gangs: SELECTIVITY BP1(pin 8) -> pins 5+6 ; FREQUENCY BP1(pin 8) -> pin 9
+RSELF BP1 SEL_F {RSEL}
+RFRQF BP1 P9 {RFRQ}
+
+* ---- function switch pole 1 (common = board pin 12): PK pin 5, NTCH pin 10, LP pin 11
+RS1PK SEL_F SW1_COM {RPK}
+RS1NT NOTCH1 SW1_COM {RNT}
+RS1LP LP1 SW1_COM {RLP}
+
+* ---- section 2: U2B summer, U3A and U3B integrators
+R6 SW1_COM SUM2 22k
+XU2B SEL_R SUM2 BPLUS 0 HP2 QF_OPAMP GBW={OPGBW} SR={OPSR}
+R7 SUM2 HP2 22k
+R14 SUM2 LP2 22k
+* C10 (across R14): value not given on original, not fitted
+R13 HP2 NOTCH2 3.3k
+R12 NOTCH2 LP2 3.3k
+* R8: 10k alignment trim used as a rheostat
+R8 HP2 INT3 {RT8}
+XU3A BIAS INT3 BPLUS 0 BP2 QF_OPAMP GBW={OPGBW} SR={OPSR}
+C4 INT3 BP2 18n
+R24 BP2 P19 10k
+R9 SEL_R BIAS {RQ}
+R10 P15 INT4 {RT}
+XU3B BIAS INT4 BPLUS 0 LP2 QF_OPAMP GBW={OPGBW} SR={OPSR}
+C5 INT4 LP2 18n
+R11 LP2 P14 {RT}
+* front panel, section 2 gangs: SELECTIVITY BP2(pin 18) -> pins 13+16 ; FREQUENCY BP2(pin 18) -> pin 15
+RSELR BP2 SEL_R {RSEL}
+RFRQR BP2 P15 {RFRQ}
+
+* ---- function switch pole 2 (common = board pin 3): PK pin 19, NTCH pin 17, LP pin 14
+RS2PK P19 SW2_COM {RPK}
+RS2NT NOTCH2 SW2_COM {RNT}
+RS2LP P14 SW2_COM {RLP}
+
+* ---- output amplifier U4
+C11 SW2_COM U4_INV 220n
+R25 U4_INV U4_OUT 100k
+C6 U4_INV U4_OUT 1n
+XU4 BIAS U4_INV BPLUS 0 U4_OUT QF_OPAMP GBW={OPGBW} SR={OPSR}
+R26 U4_OUT OUT_QF1 100
+* load = amp board input (R101 + R102 into U101)
+RLOAD OUT_QF1 BIAS 112k
+
+* ---- analysis (LTspice). Plot V(out_qf1) in dB.
+.ac dec 400 100 10k
+.step param SEL list 0 0.5 0.8 0.95 1
+*.step param FREQ list 0 0.05 0.1 0.25 0.5 1
+*.step param MODE list 1 2 3
+*.tran 10u 50m 30m
+.meas AC peak MAX mag(V(out_qf1))
+.meas AC fpeak WHEN mag(V(out_qf1))=peak
+.end
