@@ -15,21 +15,27 @@ Plot `V(out_qf1)` (filter output, board pin 21) or `V(audio_out)` (speaker).
 ## Front-panel controls (parameters)
 | Param | Meaning |
 |---|---|
-| `FREQ` 0–1 | FREQUENCY pot rotation (0 = CCW = 1.88 kHz, 1 = CW = 181 Hz with 4.7k parts) |
-| `SEL` 0–1 | SELECTIVITY rotation (0 = flat, 1 = narrowest, about 22 Hz cascaded) |
+| `FREQ` 0–1 | FREQUENCY pot rotation (0 = CCW = 2.68 kHz, 1 = CW = 217 Hz with the fitted 3.3k parts) |
+| `SEL` 0–1 | SELECTIVITY rotation (0 = flat, 1 = narrowest, about 37–39 Hz cascaded) |
 | `MODE` | 1 = PK, 2 = NTCH, 3 = LP |
 | `LOGPOT` | 0 = linear pots, 1 = audio taper |
 | `OPGBW`, `OPSR` | Op-amp speed: 3Meg/13Meg = TL072 (rebuild); 1Meg/0.5Meg = µA747/741 (original) |
-| `RT`, `RQ`, `RT8` | The "chosen on test" resistors (R3/R5/R10/R11, R4/R9, R8); default 4.7k |
+| `RT`, `RQ`, `RT8` | The "chosen on test" resistors (R3/R5/R10/R11, R4/R9, R8); defaults 3.3k, 4.7k, 3.3k |
 | `VACRMS`, `RLOAD`, `MAINS` | Amp board: AC input (V rms), speaker impedance, mains frequency |
 
 Use `.step param ...` (examples are commented in each file) to sweep any of these.
 
-## Checked in ngspice (default parts)
-- PK: f₀ 181 Hz to 1.88 kHz; at full selectivity, about 22–24 Hz −3 dB bandwidth and +28 to +30 dB gain.
-- NTCH: 46–65 dB deep. LP: +13 dB passband, falling 40 dB within 1.25 octaves.
-- Amp: B+ 15.1 V unloaded (12 VAC in), clips at about 3.9 V peak, or about 0.95 W into 8 Ω.
-- Complete unit, peak set to 1 kHz: +22.6 dB at 1 kHz, about −18 dB relative at ±100 Hz, about −40 dB at 700 Hz and 1.4 kHz.
+## Checked in ngspice 45.2 (default parts: RT = RT8 = 3.3k, RQ = 4.7k, TL072, linear pots)
+| Check | Conditions | Result |
+|---|---|---|
+| PK tuning range | SEL=1, FREQ 0 → 1 | f₀ 2675 Hz → 217 Hz (FREQ=0.5: 305 Hz) |
+| PK at full selectivity | SEL=1 | −3 dB bandwidth 37–39 Hz (cascaded), +29 to +30 dB gain |
+| NTCH depth | SEL 0.5 / 0.95 | 55 / 42 dB at 2.7 kHz; 76–78 dB at 217–306 Hz |
+| LP | FREQ=0, SEL=0 | +13.7 dB passband, −3 dB at about 950 Hz |
+| Amp | 12 VAC in, 8 Ω | B+ 15.1 V unloaded, clips at about 3.9 V peak, or about 0.95 W |
+| Complete unit | FREQ=0.041 (peak at 1 kHz), SEL=0.8, 50 mV in | +22.5 dB at 1 kHz; −12.6 dB at ±100 Hz; −34 dB at 700 Hz, −35 dB at 1.4 kHz |
+
+With the earlier 4.7k parts the range was 181 Hz–1.88 kHz, short of the manual's 2.5 kHz, and the narrowest bandwidth was 26–27 Hz. The amp-board figures do not depend on RT.
 
 ## Schematics (.asc)
 ```

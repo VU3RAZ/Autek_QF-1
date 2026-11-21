@@ -27,7 +27,7 @@ Each folder contains:
 - **Mounting:** H101 is a plated M3 hole on GND, the original "direct RF ground to chassis through screw". The other holes are unplated.
 
 ## Values to confirm on test (as the original notes say)
-- R3, R5, R10, R11: fitted as 4.7K. The original says 3.3K to 6.8K, chosen to match C2 to C5 (C2 to C5 matched to 1 %).
+- R3, R5, R10, R11: fitted as 3.3K. The original says 3.3K to 6.8K, chosen to match C2 to C5 (C2 to C5 matched to 1 %). 3.3K gives a 217 Hz–2.68 kHz tuning range, covering the manual's 250–2500 Hz; 4.7K would top out at 1.88 kHz. Set the R8 trim to about 3.3K to align section 2. R11 also sets the low-pass mode gain (U4 gain 30, +29.6 dB).
 - R4, R9: fitted as 4.7K. The original says "chosen to match select. pot" and gives no value; 4.7K is an estimate from the circuit, so adjust for the selectivity range you want.
 - C9, C10: no value on the original (in parallel with R17/R14). Footprints are provided and marked DNP.
 - C7: "not included in QF-1" (QF-2 output). Marked DNP.

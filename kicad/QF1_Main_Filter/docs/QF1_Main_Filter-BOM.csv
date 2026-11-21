@@ -16,10 +16,10 @@ Qty,References,Value,Footprint,Fit,Notes
 1,J4,Pin 21 QF-1 OUT,PinHeader_1x01_P2.54mm_Vertical,fit,
 2,R1 R25,100K,R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,
 5,R2 R6 R7 R14 R17,22K,R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,
-3,R3 R5 R10,4.7K,R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"3.3K-6.8K, matched to C2-C5"
+3,R3 R5 R10,3.3K,R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"3.3K-6.8K, matched to C2-C5"
 2,R4 R9,4.7K,R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,select to match selectivity pot
 1,R8,10K trim,Potentiometer_Bourns_3386P_Vertical,fit,alignment trim (rheostat)
-1,R11,4.7K,R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,3.3K-6.8K
+1,R11,3.3K,R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,3.3K-6.8K
 4,R12 R13 R15 R16,3.3K,R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,
 2,R20 R21,220K,R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,
 1,R24,10K,R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,

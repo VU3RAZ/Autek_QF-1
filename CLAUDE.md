@@ -53,8 +53,9 @@ library tables aren't configured. All paths are repo-relative (`tools/kicad-gen/
 - KiCad 7's CLI has no ERC command. Run ERC in the GUI.
 
 ## Open items / assumptions
-- R3, R5, R10, R11 = 4.7k (original: 3.3k–6.8k, matched to C2–C5). R4, R9 = 4.7k (original: "chosen to match
-  select. pot"; 4.7k reproduces the manual's 40–50 Hz minimum bandwidth).
+- R3, R5, R10, R11 = 3.3k (original: 3.3k–6.8k, matched to C2–C5). 3.3k is needed to reach the manual's 2.5 kHz: the sim gives
+  217 Hz–2.68 kHz, while 4.7k tops out at 1.88 kHz. R4, R9 = 4.7k (original: "chosen to match select. pot"); with
+  3.3k in R3/R10 this gives about 37–39 Hz cascaded minimum bandwidth (manual: 40–50 Hz). Sim default RT8 (R8 trim) = 3.3k.
 - C9/C10: value not on original (DNP). C7: not used in QF-1 (DNP). C2–C5 read as .018 µF.
 - Screw terminals J101/J102: wire-entry side assumed; check in the 3D viewer.
 - The amp board's Sallen-Key corner works out at about 1.45 kHz from the scanned values; worth measuring.

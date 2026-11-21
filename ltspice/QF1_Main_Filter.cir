@@ -8,14 +8,15 @@
 *   MODE  : 1 = PK (peak), 2 = NTCH (notch), 3 = LP (low-pass)
 *   LOGPOT: 0 = linear-taper pots, 1 = audio (log) taper
 *   OPGBW / OPSR : op-amp gain-bandwidth and slew rate (TL072: 3Meg/13Meg; original uA747: 1Meg/0.5Meg)
-*   RT, RQ: the "chosen on test" resistors (R3,R5,R10,R11 and R4,R9), 4.7k as fitted in the KiCad rebuild
+*   RT, RQ: the "chosen on test" resistors (R3,R5,R10,R11 = 3.3k and R4,R9 = 4.7k, as fitted in the KiCad rebuild)
+*   RT8 : R8 trim setting (set equal to RT so both sections tune together)
 * Node names follow the KiCad schematic (BPLUS = B+, BPIN = board pin 1).
 
 .include qf1_models.lib
 
 .param FREQ=0.5 SEL=0.7 MODE=1 LOGPOT=0
 .param OPGBW=3Meg OPSR=13Meg
-.param RT=4.7k RQ=4.7k RT8=4.7k
+.param RT=3.3k RQ=4.7k RT8=3.3k
 .param VSUP=15 VAMP=0.5 FSIG=1k
 
 * pot resistances (rheostats, 0..500k), linear or audio taper; 1 ohm minimum

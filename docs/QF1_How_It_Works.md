@@ -16,7 +16,7 @@ The function switch picks the matching output of *both* sections, so every mode 
 
 Signal runs left to right across the top row, then right to left across the bottom row. The shaded sections are the two identical filter cores; dashed lines are mechanical ganging, not signal.
 
-The figures below are calculated from the component values on the original schematic. Where the original says a part is "chosen" (R3, R5, R8, R10, R11; R4, R9), I assumed the 4.7 kΩ fitted in the KiCad rebuild. The results line up well with the manual's own claims: 250–2500 Hz tuning, and bandwidth from 40–50 Hz up to essentially flat.
+The figures below are calculated from the component values on the original schematic. Where the original says a part is "chosen" (R3, R5, R8, R10, R11; R4, R9), I assumed the values fitted in the KiCad rebuild: 3.3 kΩ for R3, R5, R10, R11 (and R8 trimmed to match), and 4.7 kΩ for R4, R9. The results line up well with the manual's own claims: 250–2500 Hz tuning, and bandwidth from 40–50 Hz up to essentially flat.
 
 ## Input stage and single-supply bias
 
@@ -65,8 +65,8 @@ $$
 f_0 = \frac{1}{2\pi C\sqrt{R_3\,(R_5 + R_{pot})}}
 $$
 
-- With R3 = R5 = 4.7 kΩ and C = 18 nF, f₀ runs from **1.88 kHz** (pot at 0 Ω) to **181 Hz** (500 kΩ).
-- With 3.3 kΩ parts it runs from about 2.7 kHz down to 217 Hz. The manual's "approx. 250 Hz to 2500 Hz" sits between the two, which matches the note that R3/R5/R10/R11 are "chosen" in the 3.3–6.8 kΩ range to trim each unit.
+- With R3 = R5 = 3.3 kΩ (as fitted) and C = 18 nF, f₀ runs from **2.68 kHz** (pot at 0 Ω) to **217 Hz** (500 kΩ). This covers the manual's "approx. 250 Hz to 2500 Hz".
+- With 4.7 kΩ parts it would run only from 1.88 kHz down to 181 Hz, missing the top of the manual's range. That is why the rebuild uses 3.3 kΩ, the bottom of the original's "chosen" 3.3–6.8 kΩ range.
 - Clockwise adds resistance and so lowers frequency, exactly as the manual says.
 
 **Tuning law.** Because f₀ ∝ 1/√R, a linear-taper pot crowds the top of the range into the first part of the rotation. With linear taper, 10% rotation is already down to about 550 Hz, and half rotation to about 255 Hz. The schematic does not state the pot taper. An audio (log) taper spreads the dial far more evenly, and it is what I'd fit in a rebuild.
@@ -84,16 +84,16 @@ BW = \frac{f_0}{Q} = \frac{g\,k}{2\pi\,\tau_1},\qquad k = \frac{R_4}{R_4 + R_{se
 $$
 
 - **Pot at minimum (fully CCW):** k = 1, so section 1's bandwidth is about 4.2 kHz and Q < 1. The response is essentially flat, as the manual says.
-- **Pot at maximum (fully CW):** with R4 = 4.7 kΩ, k = 0.0093. Section 1's bandwidth is then **≈ 39 Hz** and section 2's ≈ 52 Hz (its g is 3.0). The manual quotes "as small as 40–50 Hz". That agreement suggests R4/R9 ≈ 4.7 kΩ is close to what the factory chose.
+- **Pot at maximum (fully CW):** with R4 = 4.7 kΩ, k = 0.0093. With τ₁ set by R3 = 3.3 kΩ, section 1's bandwidth is then **≈ 55 Hz** and section 2's ≈ 74 Hz (its g is 3.0); cascaded, the simulation gives 37–39 Hz. The manual quotes "as small as 40–50 Hz", so R4/R9 ≈ 4.7 kΩ is close to what the factory chose. (With 4.7 kΩ in R3 the sections would be ≈ 39 and 52 Hz, and the cascade about 27 Hz.)
 - **The law is strongly non-linear.** Bandwidth tracks 1/(R4 + R_sel), so most of the narrowing happens in the last part of the rotation. That explains the manual's odd-looking percentages: 10% for low-pass, 20–60% for SSB peak, 30–100% for CW.
 
 **Consequence: Q rises with frequency.** With bandwidth held constant, Q = f₀/BW grows as you tune up. At full selectivity (section 1):
 
 | Centre frequency | Bandwidth | Q per section |
 | --- | --- | --- |
-| 250 Hz | ≈ 39 Hz | ≈ 6 |
-| 1 kHz | ≈ 39 Hz | ≈ 26 |
-| 2.5 kHz | ≈ 39 Hz | ≈ 64 |
+| 250 Hz | ≈ 55 Hz | ≈ 4.5 |
+| 1 kHz | ≈ 55 Hz | ≈ 18 |
+| 2.5 kHz | ≈ 55 Hz | ≈ 45 |
 
 High Q near the top of the range meets the slow 1970s op-amps. A µA747 has about 1 MHz gain-bandwidth, and its excess phase pushes the effective Q of a state-variable loop higher still, towards ringing or oscillation. This is the reason behind the manual's warnings: full selectivity in peak only from 250 to 1300 Hz, under 80% selectivity at high frequencies, and possible ringing at full rotation. The TL072 in the rebuild has about 3 MHz gain-bandwidth and eases this noticeably.
 
@@ -119,12 +119,12 @@ U4 (µA741, now TL071) is an AC-coupled inverting amplifier whose input resistor
 
 - **Feedback:** R25 = 100 kΩ in parallel with C6 = 1 nF. The + input sits on the 7.5 V bias, so the output idles at 7.5 V and stays DC-coupled through R26 (100 Ω) to board pin 21. The amp board inherits this well-filtered 7.5 V as its own operating point, which saves a coupling capacitor.
 - **C6 sets a low-pass pole at 1.6 kHz** (1/(2π × 100 kΩ × 1 nF)). That is a deliberate hiss cut for CW and speech, but it also takes 3 dB off a 1.6 kHz peak and about 5 dB off one at 2.5 kHz.
-- **C11 (0.22 µF) with the source resistance** forms a mode-dependent high-pass: about 72 Hz in PK (R24 10 kΩ), 154 Hz in LP (R11 4.7 kΩ), and 440 Hz in NTCH (R12 ∥ R13 = 1.65 kΩ). The notch mode's higher corner thins speech a little, while the other two have no audible effect in the communications band.
+- **C11 (0.22 µF) with the source resistance** forms a mode-dependent high-pass: about 72 Hz in PK (R24 10 kΩ), 219 Hz in LP (R11 3.3 kΩ), and 440 Hz in NTCH (R12 ∥ R13 = 1.65 kΩ). The notch mode's higher corner thins speech a little, while the other two have no audible effect in the communications band.
 
 | Mode | Source resistance | U4 gain (R25 / R_source) |
 | --- | --- | --- |
 | PK | R24 = 10 kΩ | 10 (+20 dB) |
-| LP | R11 ≈ 4.7 kΩ | ≈ 21 (+26 dB) |
+| LP | R11 = 3.3 kΩ | ≈ 30 (+29.6 dB) |
 | NTCH | R12 ∥ R13 = 1.65 kΩ | ≈ 61 (+36 dB) |
 
 R26 isolates U4 from cable capacitance. For the QF-2, C7 couples the same node straight to board pin 2 as a line-level output; the QF-1 omits it.
@@ -151,11 +151,11 @@ With Q near 1 there is about 1 dB of lift just below the corner, then 12 dB/octa
 
 ## Gain structure and key numbers
 
-From input jack to pin 21, the NTCH and LP passbands come out at about +10 to +13 dB. PK sits near them at mid selectivity but swings about 40 dB across the selectivity range, so you need to touch the receiver's volume control when you sharpen a peak.
+From input jack to pin 21, the NTCH and LP passbands come out at about +10 to +16 dB. PK sits near them at mid selectivity but swings about 40 dB across the selectivity range, so you need to touch the receiver's volume control when you sharpen a peak.
 
 | Path | Stage gains (passband or at peak) | Net to pin 21 |
 | --- | --- | --- |
-| LP | 0.22 (sec. 1) × 1.0 (sec. 2) × 21 (U4) | ≈ 4.7 (+13 dB) |
+| LP | 0.22 (sec. 1) × 1.0 (sec. 2) × 30 (U4) | ≈ 6.7 (+16 dB) |
 | NTCH | 0.11 (sec. 1 average) × 0.47 (sec. 2, incl. loading) × 61 (U4) | ≈ 3.1 (+10 dB) |
 | PK, minimum selectivity | 0.099 × 0.33 × 10 | ≈ 0.33 (−10 dB) |
 | PK, mid selectivity (k ≈ 0.05) | 0.099 × 6.7 × 10 | ≈ 6.6 (+16 dB) |
@@ -165,8 +165,8 @@ The amp board adds unity gain, minus its low-pass roll-off.
 
 | Parameter | Value (calculated) | Manual says |
 | --- | --- | --- |
-| Tuning range | 181 Hz–1.88 kHz (4.7 kΩ) to 217 Hz–2.7 kHz (3.3 kΩ) | ≈ 250–2500 Hz |
-| Narrowest bandwidth | ≈ 39 Hz per section, about 25–35 Hz cascaded | 40–50 Hz |
+| Tuning range | 217 Hz–2.68 kHz (3.3 kΩ, as fitted); 181 Hz–1.88 kHz with 4.7 kΩ | ≈ 250–2500 Hz |
+| Narrowest bandwidth | ≈ 55 Hz per section, about 37–39 Hz cascaded | 40–50 Hz |
 | Widest | Q < 1 per section: essentially flat | Essentially flat |
 | Notch depth | Limited by matching and tracking | ≈ 45–50 dB (plots) |
 | Low-pass slope | 24 dB/octave (4th order) | Steep cut-off |
@@ -176,7 +176,7 @@ The amp board adds unity gain, minus its low-pass roll-off.
 | Output power | ≈ 0.5–0.8 W into 8 Ω | Any impedance speaker or phones |
 | Supply | ≈ 15 V off-load, single rail, 7.5 V internal reference | — |
 
-The calculations assume 4.7 kΩ for every "chosen" resistor (R3, R5, R8, R10, R11, R4, R9) and 18 nF capacitors; real units were trimmed individually.
+The calculations assume the fitted values for the "chosen" resistors (3.3 kΩ for R3, R5, R10, R11 with R8 trimmed to match; 4.7 kΩ for R4, R9) and 18 nF capacitors; real units were trimmed individually.
 
 ## Performance rating
 
